@@ -1,0 +1,9 @@
+Package: com.theo78825.spotifyfullscreenartworkui
+Name: SpotifyFullScreenArtworkUI
+Depends: mobilesubstrate
+Version: 1.0.5
+Architecture: iphoneos-arm
+Description: Makes the Spotify Artwork Fullscreen
+Maintainer: theo78825
+Author: theo78825
+Section: Tweaks
