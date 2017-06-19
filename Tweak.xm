@@ -20,6 +20,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+////////////////////////
+// The code has not been cleaned up. I am aware there are better ways to do this
+// but I am new to tweak development so either don’t know how or don’t have time.
+// Thanks to Gh0stbyte for some code contribution
+////////////////////////
+
+
 #import <UIKit/UIKit.h>
 
 double screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -40,7 +47,7 @@ double iPhone5S = 320;
 
 
 //Size for the now playing artwork. The first number is width and the second is height.
-CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.width}; //300,300
+CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.width};
 @interface MSHJelloViewConfig : NSObject
 -(bool)enabled;
 @property (nonatomic, assign) UIColor *waveColor;
@@ -59,7 +66,6 @@ CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].
 -(void)setFrameSize:(CGSize)frameSize;
 -(void)initWithFrame:(CGRect)frame;
 -(void)layoutSubviews;
-
 @end
 @interface SPTGeniusNowPlayingViewControllerImpl : UIViewController 
 @end
@@ -70,9 +76,6 @@ CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].
 @interface SPTNowPlayingCoverArtView : NSObject
 @property (nonatomic, assign) UIView *view;
 @end
-
-
-
 @interface SPTNowPlayingPlaybackController
 -(bool)isPaused;
 @end
@@ -127,19 +130,6 @@ CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].
 %end
 
 
-//%hook SPTNowPlayingCarouselContentUnitView
-//-(CGPoint)center { return CGPointMake([UIScreen mainScreen].bounds.size.width/2,[UIScreen mainScreen].bounds.size.width/2); }
-//-(CGRect)frame { return CGRectMake(artworkCenter.x, artworkCenter.y,[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.width); }
-//-(NSRect)bounds { return CGRectMake(artworkCenter.x, artworkCenter.y,[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.width); }
-//%end
-
-
-
-
-
-
-
-
 ///////////////////////////////////
 //Mitsuha Fix (Make sure wave layers show)
 ///////////////////////////////////
@@ -148,26 +138,12 @@ CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].
 //Config
 //Amount of points the wave will have.
 #define PointCount 10
-//Enable the disco outline (Random, spazzing color [If disabled it will pick ONE random color for each wave and use that])
-#define DiscoOutline YES
-//Width of the stroke of color on the wave.
+//Width of the stroke on the wave.
 #define StrokeWidth 1.0
-//Size for the now playing artwork. The first number is width and the second is height.
-
-
-//Bunch of 'headers' to enable us to call the methods that we need. 
 
 
 
-//Array and function to grab a random color. More colors can be added, and other removed easily 
-NSArray *colors = @[[UIColor redColor], [UIColor greenColor], [UIColor blueColor], [UIColor orangeColor], [UIColor yellowColor], [UIColor purpleColor], [UIColor magentaColor]];
-CGColorRef randomColor() {
-	return [colors[(arc4random() % [colors count])] CGColor];
-}
 
-//A couple variabled we can use to only have one random color.
-CGColorRef ourWaveColor;
-CGColorRef ourSubwaveColor;
 
 //The size of the stroke of color around the wave. 
 %hook MSHJelloLayer
@@ -176,7 +152,7 @@ CGColorRef ourSubwaveColor;
 }
 %end
 
-//Grab an instance of the SPTNOwPlayingPlaybackController to check if media is playing and disable the disco while paused.
+//Grab an instance of the SPTNOwPlayingPlaybackController to check if media is playing.
 SPTNowPlayingPlaybackController *playbackController;
 %hook SPTNowPlayingPlaybackController
 -(id)initWithPlayer:(id)player trackPosition:(id)position adsManager:(id)manager trackMetadataQueue:(id)queue {
@@ -185,11 +161,7 @@ SPTNowPlayingPlaybackController *playbackController;
 }
 %end
 %hook MSHJelloView
-//This and the following function control the two waves. Both are set to change the color randomly (and constantly). It can be disabled to just use ONE random color in the config above 
 -(MSHJelloLayer*)subwaveLayer {
-	//Remove fillcolor below to use ColorFlow
-	//%orig.fillColor = [self.config.subwaveColor CGColor];
-	//%orig.fillColor = [[UIColor colorWithWhite:1.0 alpha:0.5] CGColor];
 	if([self.config.subwaveColor CGColor]) {
 		%orig.fillColor = [self.config.subwaveColor CGColor];
 		return %orig;
@@ -200,8 +172,6 @@ SPTNowPlayingPlaybackController *playbackController;
 }
 
 -(MSHJelloLayer*)waveLayer {
-	//%orig.fillColor = [[UIColor colorWithWhite:1.0 alpha:0.5] CGColor];
-	//%orig.fillColor = [self.config.waveColor CGColor];
 	if([self.config.waveColor CGColor]) {
 		%orig.fillColor = [self.config.waveColor CGColor];
 		return %orig;
@@ -212,14 +182,13 @@ SPTNowPlayingPlaybackController *playbackController;
 }
 
 -(id)initWithFrame:(CGRect)frame andConfig:(id)config {
-	ourSubwaveColor = randomColor();
-	ourWaveColor = randomColor();
 	return %orig(CGRectMake(0,100,[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.height), config);
 }
 
 %end
 MSHJelloViewConfig *mitsuha;
 %hook MSHJelloViewConfig
+// Grab an instance of Mitsuha
 -(id)initWithDictionary:(id)dictionary {
 	mitsuha = %orig;
 	return mitsuha;
@@ -227,12 +196,9 @@ MSHJelloViewConfig *mitsuha;
 %end
 %hook SPTNowPlayingCoverArtView
 
-//-(CGPoint)center { return CGPointMake(160,250); }
-//-(CGRect)frame { return CGRectMake(0, 0,[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.width); }
-//-(void)layoutSubviews { %orig; [self.view setFrameSize:screenWidthCG]; }
-
-
 -(NSRect)bounds { 
+	// Mitsuha causes the artwork to shift and must be compensated for
+	// Ideally this would be simplified to ‘align to top’ but am unsure how to do this
 	if ([mitsuha enabled]) {
 		if(screenWidth == iPhone7PlusZoom) {
 		return CGRectMake(0, 15,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
@@ -276,7 +242,6 @@ MSHJelloViewConfig *mitsuha;
 }
 
 
-//-(void)initWithFrame:(CGRect)frame { return %orig; [self.view setFrameSize:screenWidthCG];  }
 %end
 
 
