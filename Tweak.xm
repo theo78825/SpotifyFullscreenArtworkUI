@@ -1,25 +1,25 @@
-MIT License
-
-Copyright (c) 2017 Sam Albert
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
+//MIT License
+//
+//Copyright (c) 2017 Sam Albert
+//
+//Permission is hereby granted, free of charge, to any person obtaining a copy
+//of this software and associated documentation files (the "Software"), to deal
+//in the Software without restriction, including without limitation the rights
+//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//copies of the Software, and to permit persons to whom the Software is
+//furnished to do so, subject to the following conditions:
+//
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
+//
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//SOFTWARE.
+//
 ////////////////////////
 // The code has not been cleaned up. I am aware there are better ways to do this
 // but I am new to tweak development so either don’t know how or don’t have time.
@@ -42,6 +42,8 @@ double iPhone7PlusZoom = 375;
 double iPhone7 = 375;
 double iPhone7Zoom = 320;
 double iPhone5S = 320;
+double iPadMini4Portrait = 768;
+double iPadMini4Landscape = 1024;
 
 
 
@@ -215,6 +217,12 @@ MSHJelloViewConfig *mitsuha;
 		else if(screenWidth == iPhone5S) {
 		return CGRectMake(0, 10.5,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
 		}
+		else if(screenWidth == iPadMini4Portrait) {
+		return CGRectMake(0, -55,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
+		}
+		//else if(screenWidth == iPadMini4Landscape) {
+		//return CGRectMake(0, 0,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
+		//}
 		else {
 		return CGRectMake(0, 9,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
 		}
@@ -236,6 +244,12 @@ MSHJelloViewConfig *mitsuha;
 	else if(screenWidth == iPhone5S) {
 	return CGRectMake(0, 35,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
 	}
+	else if(screenWidth == iPadMini4Portrait) {
+	return CGRectMake(0, 11,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
+	}
+	//else if(screenWidth == iPadMini4Landscape) {
+	//return CGRectMake(0, 0,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
+	//}
 	else {
 	return CGRectMake(0, 30,[UIScreen mainScreen].bounds.size.height/2,[UIScreen mainScreen].bounds.size.height/2); 
 	}}
