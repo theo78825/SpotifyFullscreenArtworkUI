@@ -9,3 +9,4 @@ Makefile
 .theos/fakeroot
 .theos/build_session
 .theos/_/Library/MobileSubstrate/DynamicLibraries/SpotifyFullScreenArtworkUI.plist
+Makefile

@@ -64,6 +64,15 @@ CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].
 @property (nonatomic, assign) CGColorRef strokeColor;
 @property (nonatomic, assign) CGColorRef fillColor;
 @end
+@interface SPTNowPlayingNavigationBarTitleView
+@property (nonatomic, assign) bool hidden;
+@end
+@interface SPTNowPlayingQueueButton
+@property (nonatomic, assign) bool hidden;
+@end
+@interface SPTNowPlayingChromecastBarView 
+@property (nonatomic, assign) bool hidden;
+@end
 @interface UIView (Hello)
 -(void)setFrameSize:(CGSize)frameSize;
 -(void)initWithFrame:(CGRect)frame;
@@ -96,6 +105,27 @@ CGSize newSize = {[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].
 }
 -(id)nowPlayingCoverArtViewContentForStagedContextCell:(id)cell cellSize:(CGSize)size {return %orig(cell, newSize); }
 
+%end
+
+%hook SPTNowPlayingNavigationBarTitleView
+-(void)setLayout:(id)layout {
+	self.hidden = true;
+	%orig(layout);
+}
+%end
+
+%hook SPTNowPlayingChromecastBarView
+-(void)layoutSubviews {
+	self.hidden = true;
+	%orig;
+}
+%end
+
+%hook SPTNowPlayingQueueButton
+-(void)layoutSubviews {
+	self.hidden = true;
+	%orig;
+}
 %end
 
 %hook SPTNowPlayingCoverArtViewCell

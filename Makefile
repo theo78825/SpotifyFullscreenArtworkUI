@@ -1,4 +1,4 @@
-THEOS_DEVICE_IP = 192.168.1.158
+THEOS_DEVICE_IP = 192.168.1.249
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = SpotifyFullScreenArtworkUI
